@@ -39,4 +39,6 @@ FROM common
 
 COPY --from=builder /app/pkg/ /
 
-CMD ["sh", "-c", "gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480,format=I420 ! vp8enc ! rtpvp8pay ! whipsink whip-endpoint=http://localhost:7777/whip/777"]
+CMD ["sh", "-c", "gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480,format=I420 ! x264enc ! rtph264pay ! whipsink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whip/777"]
+
+
