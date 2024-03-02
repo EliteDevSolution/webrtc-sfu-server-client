@@ -42,3 +42,4 @@ COPY --from=builder /app/pkg/ /
 CMD ["sh", "-c", "gst-launch-1.0 videotestsrc ! videoconvert ! x264enc ! rtph264pay ! whipsink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whip/777"]
 
 
+
