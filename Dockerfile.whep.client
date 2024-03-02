@@ -39,5 +39,5 @@ FROM common
 
 COPY --from=builder /app/pkg/ /
 
-CMD ["sh", "-c", "gst-launch-1.0 whepsrc audio-caps="application/x-rtp,payload=111,encoding-name=OPUS,media=audio,clock-rate=48000" video-caps="application/x-rtp,payload=102,encoding-name=H264,media=video,clock-rate=90000" ! rtph264depay ! decodebin ! videoconvert ! aasink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whip/777"]
+CMD ["sh", "-c", "gst-launch-1.0 whepsrc audio-caps="application/x-rtp,payload=111,encoding-name=OPUS,media=audio,clock-rate=48000" video-caps="application/x-rtp,payload=102,encoding-name=H264,media=video,clock-rate=90000" ! rtph264depay ! decodebin ! videoconvert ! aasink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whep/777"]
 
