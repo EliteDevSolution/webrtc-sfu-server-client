@@ -39,8 +39,4 @@ FROM common
 
 COPY --from=builder /app/pkg/ /
 
-docker run --name live777-client-whip --rm --network host \
-ghcr.io/binbat/live777-client:latest \
-gst-launch-1.0 videotestsrc ! av1enc usage-profile=realtime ! av1parse ! rtpav1pay ! whipsink whip-endpoint="http://localhost:7777/whip/777"
-
 CMD ["sh", "-c", "gst-launch-1.0 videotestsrc ! videoconvert ! x264enc ! rtph264pay ! whipsink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whip/777"]
