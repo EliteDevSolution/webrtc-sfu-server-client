@@ -40,3 +40,4 @@ FROM common
 
 COPY --from=builder /app/pkg/ /
 
+gst-launch-1.0 videotestsrc ! video/x-raw,width=640,height=480,format=I420 ! vp8enc ! rtpvp8pay ! whipsink whip-endpoint=https://b2xstream.com/whip/999
