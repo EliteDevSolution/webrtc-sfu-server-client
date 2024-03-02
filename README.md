@@ -33,31 +33,33 @@ Live777 supports the conversion of audio and video protocols widely used in the 
 
 Live777 has the following characteristics:
 
-- 📚 **Support `WHIP`/`WHEP`**
+-   📚 **Support `WHIP`/`WHEP`**
 
-  The WHIP/WHEP protocol is implemented to improve interoperability with other WebRTC application modules without the need for custom adaptations.
+    The WHIP/WHEP protocol is implemented to improve interoperability with other WebRTC application modules without the need for custom adaptations.
 
-- 🗃️ **SFU architecture**
+-   🗃️ **SFU architecture**
 
-  Only responsible for forwarding, do not do confluence, transcoding and other resource overhead of the media processing work, the encoding and decoding work are respectively placed on the sender and the receiver.
+    Only responsible for forwarding, do not do confluence, transcoding and other resource overhead of the media processing work, the encoding and decoding work are respectively placed on the sender and the receiver.
 
-- 🌐 **Multiple platform support**
+-   🌐 **Multiple platform support**
 
-  With rich multi-platform native support.
+    With rich multi-platform native support.
 
-- 🔍 **Multiple audio and video encoding formats support**
+-   🔍 **Multiple audio and video encoding formats support**
 
-  Support a variety of video encoding and audio encoding formats, providing a wider range of compatibility to help enable adaptive streaming.
+    Support a variety of video encoding and audio encoding formats, providing a wider range of compatibility to help enable adaptive streaming.
 
 ### DataChannel Forward
 
 > NOTE: About `createDataChannel()`
+>
 > 1. Live777 Don't support `label`, `createDataChannel(label)` this `label` is not used
 > 2. Live777 Don't support `negotiated`, `{ id: 42, negotiated: true }` this don't support
 
 ![live777-datachannel](./docs/live777-datachannel.excalidraw.svg)
 
 ## Current support encode
+
 | protocol | video codecs                | audio codecs   |
 | -------- | --------------------------- | -------------- |
 | `WHIP`   | `AV1`, `VP9`, `VP8`, `H264` | `Opus`, `G722` |
@@ -112,28 +114,30 @@ gst-launch-1.0 udpsrc port=5004 caps="application/x-rtp, media=(string)video, en
 ```bash
 docker run --name live777-client-whip --rm --network host \
 ghcr.io/binbat/live777-client:latest \
-gst-launch-1.0 videotestsrc ! videoconvert ! vp8enc ! rtpvp8pay ! whipsink whip-endpoint="http://localhost:7777/whip/777"
+gst-launch-1.0 videotestsrc ! videoconvert ! vp8enc ! rtpvp8pay ! whipsink whip-endpoint="http://191.96.31.104:7777/whip/777"
 ```
+
+docker run --name live777-server --rm --network host ghcr.io/binbat/live777-client:0.3.3 live777
 
 `WHEP`:
 
 ```bash
 docker run --name live777-client-whep --rm --network host \
 ghcr.io/binbat/live777-client:latest \
-gst-launch-1.0 whepsrc whep-endpoint="http://localhost:7777/whep/777" audio-caps="application/x-rtp,payload=111,encoding-name=OPUS,media=audio,clock-rate=48000" video-caps="application/x-rtp,payload=96,encoding-name=VP8,media=video,clock-rate=90000" ! rtpvp8depay ! vp8dec ! videoconvert ! aasink
+gst-launch-1.0 whepsrc whep-endpoint="http://191.96.31.104:7777/whip/777" audio-caps="application/x-rtp,payload=111,encoding-name=OPUS,media=audio,clock-rate=48000" video-caps="application/x-rtp,payload=96,encoding-name=VP8,media=video,clock-rate=90000" ! rtpvp8depay ! vp8dec ! videoconvert ! aasink
 ```
 
 #### Video: VP9
 
 `WHIP`:
 
-``` bash
+```bash
 docker run --name live777-client --rm --network host \
 ghcr.io/binbat/live777-client:latest \
 gst-launch-1.0 videotestsrc ! videoconvert ! vp9enc ! rtpvp9pay ! whipsink whip-endpoint="http://localhost:7777/whip/777"
 ```
 
- `WHEP`:
+`WHEP`:
 
 ```bash
 docker run --name live777-client-whep --rm --network host \
@@ -202,6 +206,7 @@ gst-launch-1.0 audiotestsrc ! audioconvert ! avenc_g722 ! rtpg722pay ! whipsink 
 ### OBS Studio WHIP client
 
 > Note:
+>
 > 1. OBS Studio version [**30 or higher**](https://obsproject.com/forum/threads/obs-studio-30-beta.168984/)
 > 2. OBS WHIP Current only support **H264** video codecs and **Opus** audio codecs
 
@@ -209,7 +214,7 @@ gst-launch-1.0 audiotestsrc ! audioconvert ! avenc_g722 ! rtpg722pay ! whipsink 
 
 #### Play stream
 
-- open your browser, enter the URL: [`http://localhost:7777/`](http://localhost:7777/)
+-   open your browser, enter the URL: [`http://localhost:7777/`](http://localhost:7777/)
 
 ## Tools
 
@@ -218,34 +223,33 @@ We have tools for support rtp -> whip/whep convert
 ![live777-apps](./docs/live777-apps.excalidraw.svg#gh-light-mode-only)
 ![live777-apps](./docs/live777-apps.dark.svg#gh-dark-mode-only)
 
-
 For Example:
 
 ```bash
 ffmpeg -> whipinto -> live777 -> whepfrom -> ffplay
 ```
 
-Application        | `AV1`  | `VP9`  | `VP8`  | `H264` | `OPUS` | `G722` |
------------------- | ------ | ------ | ------ | ------ | ------ | ------ |
-Browser whip       | :star: | :star: | :star: | :star: | :star: | :star: |
-Browser whep       | :star: | :star: | :star: | :star: | :star: | :star: |
-Gstreamer whip     | :tv: 1 | :star: | :star: | :star: | :star: | :star: |
-Gstreamer whep     | :tv: 2 | :star: | :star: | :star: | :star: | :star: |
-Gstreamer rtp-into | :tv: 1 | :star: | :star: | :star: | :star: | :star: |
-Gstreamer rtp-from | :tv: 2 | :star: | :star: | :star: | :star: | :star: |
-FFmpeg rtp-into    | :shit: | :star: | :star: | :star: | :star: | :star: |
-FFmpeg rtp-from    | :shit: | :star: | :star: | :star: | :star: | :star: |
-VLC rtp-into       | :bulb: | :bulb: | :star: | :star: | :star: | :bulb: |
-VLC rtp-from       | :bulb: | :bulb: | :star: | :star: | :star: | :bulb: |
-OBS Studio whip    | :tv: 3 | :shit: | :shit: | :star: | :star: | :shit: |
+| Application        | `AV1`  | `VP9`  | `VP8`  | `H264` | `OPUS` | `G722` |
+| ------------------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| Browser whip       | :star: | :star: | :star: | :star: | :star: | :star: |
+| Browser whep       | :star: | :star: | :star: | :star: | :star: | :star: |
+| Gstreamer whip     | :tv: 1 | :star: | :star: | :star: | :star: | :star: |
+| Gstreamer whep     | :tv: 2 | :star: | :star: | :star: | :star: | :star: |
+| Gstreamer rtp-into | :tv: 1 | :star: | :star: | :star: | :star: | :star: |
+| Gstreamer rtp-from | :tv: 2 | :star: | :star: | :star: | :star: | :star: |
+| FFmpeg rtp-into    | :shit: | :star: | :star: | :star: | :star: | :star: |
+| FFmpeg rtp-from    | :shit: | :star: | :star: | :star: | :star: | :star: |
+| VLC rtp-into       | :bulb: | :bulb: | :star: | :star: | :star: | :bulb: |
+| VLC rtp-from       | :bulb: | :bulb: | :star: | :star: | :star: | :bulb: |
+| OBS Studio whip    | :tv: 3 | :shit: | :shit: | :star: | :star: | :shit: |
 
-- :star: It's working
-- :shit: Don't support
-- :bulb: I don't know, No testing
-- :tv: Note have some problem
-  1. Working, But Browser can't player this video
-  2. I don't know why av1 and whep error
-  3. [AV1 is now available, But not released](https://github.com/obsproject/obs-studio/pull/9331)
+-   :star: It's working
+-   :shit: Don't support
+-   :bulb: I don't know, No testing
+-   :tv: Note have some problem
+    1. Working, But Browser can't player this video
+    2. I don't know why av1 and whep error
+    3. [AV1 is now available, But not released](https://github.com/obsproject/obs-studio/pull/9331)
 
 ### whipinto
 
@@ -326,6 +330,7 @@ Use VLC player
 ```bash
 vlc stream.sdp
 ```
+
 ## Sponsors
 
 <p align="center">
@@ -341,4 +346,3 @@ vlc stream.sdp
     <img src="https://kerstatic.cloud-open-api.com/email-img/hostker-logo.png" height="80" alt="Hostker logo.">
   </a>
 </p>
-
