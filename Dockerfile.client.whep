@@ -39,7 +39,4 @@ FROM common
 
 COPY --from=builder /app/pkg/ /
 
-CMD gst-launch-1.0 whepsrc whep-endpoint="https://webrtc-live777.eoldao.easypanel.host/whep/777" \
-    audio-caps="application/x-rtp,payload=111,encoding-name=OPUS,media=audio,clock-rate=48000" \
-    video-caps="application/x-rtp,payload=102,encoding-name=H264,media=video,clock-rate=90000" \
-    ! rtph264depay ! decodebin ! videoconvert ! aasink
+CMD ["sh", "-c", "gst-launch-1.0 videotestsrc ! videoconvert ! x264enc ! rtph264pay ! whipsink whip-endpoint=https://webrtc-live777.eoldao.easypanel.host/whep/777"]
