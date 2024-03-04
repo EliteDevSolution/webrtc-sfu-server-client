@@ -17,4 +17,6 @@ COPY --from=builder /app/target/release/live777 /usr/local/bin/live777
 COPY --from=builder /app/target/release/whipinto /usr/local/bin/whipinto
 COPY --from=builder /app/target/release/whepfrom /usr/local/bin/whepfrom
 
+EXPOSE 7777
+
 CMD ["live777"]
