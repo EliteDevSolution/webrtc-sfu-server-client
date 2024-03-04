@@ -1,5 +1,5 @@
 # Http Server Listen Address
-# listen = "[::]:7777"
+listen = "[::]:7777"
 
 [[ice_servers]]
 urls = [
@@ -14,9 +14,9 @@ urls = [
 # credential = "live777"
 
 # WHIP/WHEP auth token
-# Headers["Authorization"] = "Bearer {token}"
+#Headers["Authorization"] = "Bearer {token}"
 # [auth]
-# tokens = ["live777"]
+#tokens = ["live777"]
 
 # Not WHIP/WHEP standard
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic
