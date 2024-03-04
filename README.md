@@ -1,6 +1,6 @@
 <h1 align="center">
   <img src="./assets/logo.svg" alt="Live777" width="200">
-  <br>Live777<br>
+  <br>Rust WebRTC server and client for WHIP, WHEP<br>
 </h1>
 
 <div align="center">
@@ -8,14 +8,6 @@
 [![Rust](https://github.com/binbat/live777/actions/workflows/rust.yml/badge.svg)](https://github.com/binbat/live777/actions/workflows/rust.yml)
 [![GitHub release](https://img.shields.io/github/tag/binbat/live777.svg?label=release)](https://github.com/binbat/live777/releases)
 
-</div>
-
-<div align="center">
-    <a href="https://discord.gg/mtSpDNwCAz"><img src="https://img.shields.io/badge/-Discord-424549?style=social&logo=discord" height=25></a>
-    &nbsp;
-    <a href="https://t.me/binbatlib"><img src="https://img.shields.io/badge/-Telegram-red?style=social&logo=telegram" height=25></a>
-    &nbsp;
-    <a href="https://twitter.com/binbatlab"><img src="https://img.shields.io/badge/-Twitter-red?style=social&logo=twitter" height=25></a>
 </div>
 
 ---
