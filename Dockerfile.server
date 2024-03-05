@@ -17,6 +17,4 @@ COPY --from=builder /app/target/release/live777 /usr/local/bin/live777
 COPY --from=builder /app/target/release/whipinto /usr/local/bin/whipinto
 COPY --from=builder /app/target/release/whepfrom /usr/local/bin/whepfrom
 
-EXPOSE 3000 80 443 22 19302 7777 8080 8888
-
 CMD ["live777"]
