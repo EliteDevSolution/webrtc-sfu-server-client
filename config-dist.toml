@@ -12,7 +12,7 @@ urls = [
 # credential = "livestream707"
 
 # WHIP/WHEP auth token
-Headers["Authorization"] = "Bearer {token}"
+#Headers["Authorization"] = "Bearer {token}"
 # [auth]
 #tokens = ["livestream707"]
 
