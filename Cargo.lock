@@ -1276,7 +1276,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "live777"
+name = "livestream707"
 version = "0.3.3"
 dependencies = [
  "anyhow",

@@ -57,10 +57,11 @@ async fn main() {
         .register(Box::new(metrics::SUBSCRIBE.clone()))
         .unwrap();
     let cfg = Config::parse();
+
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| format!("live777={},webrtc=error", cfg.log.level).into()),
+                .unwrap_or_else(|_| format!("livestream707={},webrtc=error", cfg.log.level).into()),
         )
         .with(tracing_logfmt::layer())
         .init();

@@ -11,10 +11,10 @@ RUN cargo build --package=whepfrom --release
 
 FROM debian:bookworm-slim
 
-COPY --from=builder /app/config-dist.toml /etc/live777/config.toml
-COPY --from=builder /app/target/release/live777 /usr/local/bin/live777
+COPY --from=builder /app/config-dist.toml /etc/livestream707/config.toml
+COPY --from=builder /app/target/release/livestream707 /usr/local/bin/livestream707
 
 COPY --from=builder /app/target/release/whipinto /usr/local/bin/whipinto
 COPY --from=builder /app/target/release/whepfrom /usr/local/bin/whepfrom
 
-CMD ["live777"]
+CMD ["livestream707"]

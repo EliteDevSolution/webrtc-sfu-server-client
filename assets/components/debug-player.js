@@ -9,15 +9,7 @@ export default class VideoSizeSelectElement extends HTMLElement {
     }
 
     connectedCallback() {
-        const labelWidthHeight = document.createElement("label")
-        shadow.append(labelWidthHeight)
-        shadow.append(this.labelCount)
-        shadow.append(document.createElement("br"))
-        shadow.append(this.labelSize)
-        shadow.append(document.createElement("br"))
-        shadow.append(selectWidthValue)
-        shadow.append(document.createElement("br"))
-        shadow.append(this.video)
+
     }
 
     // @params MediaStream
@@ -30,6 +22,8 @@ export default class VideoSizeSelectElement extends HTMLElement {
         this.stream.addEventListener("removetrack", this.setShowTrackCount)
         this.setShowTrackCount(stream)
         this.video.srcObject = stream
+        $('.live-status').removeClass('live-status-off').addClass('live-status-on');
+        $('.live-status-title').text('Live');
     }
 
     setShowSize = () => this.labelSize.innerText = `Raw Resolution: ${this.video.videoWidth}x${this.video.videoHeight}`

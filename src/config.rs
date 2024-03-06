@@ -143,8 +143,9 @@ impl Config {
     pub(crate) fn parse() -> Self {
         let mut result = fs::read_to_string("config.toml");
         if result.is_err() {
-            result = fs::read_to_string("/etc/live777/config.toml");
+            result = fs::read_to_string("/etc/livestream707/config.toml");
         }
+        tracing::debug!("cfg111 = {result:?}");
         if let Ok(cfg) = result {
             let cfg: Self = toml::from_str(cfg.as_str()).expect("config parse error");
             match cfg.validate() {

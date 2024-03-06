@@ -5,7 +5,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" href="./logo.svg"/>
-    <title>Live777</title>
+    <title>Live Streamming</title>
     <style>
         fieldset {
             border-style: dotted;
@@ -245,9 +245,6 @@
 
         const pc = new RTCPeerConnection()
 
-        // NOTE:
-        // 1. Live777 Don't support label
-        // 2. Live777 Don't support negotiated
         document.getElementById(idWhipDataChannel).dataChannel = pc.createDataChannel("")
 
         pc.oniceconnectionstatechange = e => logWhip(num, pc.iceConnectionState)
@@ -328,9 +325,7 @@
         logWhep(num, "started")
         const pc = new RTCPeerConnection()
 
-        // NOTE:
-        // 1. Live777 Don't support label
-        // 2. Live777 Don't support negotiated
+
         document.getElementById(idWhepDataChannel).dataChannel = pc.createDataChannel("")
 
         pc.oniceconnectionstatechange = e => logWhep(num, pc.iceConnectionState)

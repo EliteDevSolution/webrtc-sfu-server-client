@@ -31,6 +31,7 @@ export class WHEPClient extends EventTarget
 
         //Store pc object and token
         this.token = token;
+
         this.pc = pc;
 
         //Listen for candidates
@@ -50,8 +51,8 @@ export class WHEPClient extends EventTarget
                 this.endOfcandidates = true;
             }
             //Schedule patch on next tick if there is no already a timer or doing restart
-            if (!this.iceTrickeTimeout && !this.restartIce)
-            this.iceTrickeTimeout = setTimeout(() => this.patch(), 0);
+            // if (!this.iceTrickeTimeout && !this.restartIce)
+            // this.iceTrickeTimeout = setTimeout(() => this.patch(), 0);
         }
         //Create SDP offer
         const offer = await pc.createOffer();
@@ -223,8 +224,8 @@ export class WHEPClient extends EventTarget
         const answer = await fetched.text();
 
         //Schedule trickle on next tick
-        if (!this.iceTrickeTimeout)
-        this.iceTrickeTimeout = setTimeout(() => this.trickle(), 0);
+        // if (!this.iceTrickeTimeout)
+        // this.iceTrickeTimeout = setTimeout(() => this.trickle(), 0);
 
         //Set local description
         await pc.setLocalDescription(offer);

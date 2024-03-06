@@ -8,20 +8,20 @@ urls = [
 
 # [[ice_servers]]
 # urls = [ "turn:turn.22333.fun", "turn:cn.22333.fun" ]
-# username = "live777"
-# credential = "live777"
+# username = "livestream707"
+# credential = "livestream707"
 
 # WHIP/WHEP auth token
-#Headers["Authorization"] = "Bearer {token}"
+Headers["Authorization"] = "Bearer {token}"
 # [auth]
-#tokens = ["live777"]
+#tokens = ["livestream707"]
 
 # Not WHIP/WHEP standard
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic
 # Headers["Authorization"] = "Basic {Base64.encode({username}:{password})}"
 # [[auth.accounts]]
-# username = "live777"
-# password = "live777"
+# username = "livestream707"
+# password = "livestream707"
 
 # [log]
 # Env: `LOG_LEVEL`

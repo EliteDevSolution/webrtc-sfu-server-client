@@ -1,5 +1,5 @@
 [package]
-name = "live777"
+name = "livestream707"
 version = "0.3.3"
 edition = "2021"
 license = "MPL-2.0"
@@ -14,9 +14,6 @@ axum = { version = "0.7.4", features = ["multipart", "tracing"] }
 tower-http = { version = "0.5.2", features = ["fs", "auth", "trace"] }
 
 # TODO
-# There have error, Next commit can't work with obs studio
-# webrtc = { git = "https://github.com/webrtc-rs/webrtc", rev = "9c0570ad562b226cc9c6c0a3c7a9a28e1d43e08f" }
-# Reference: https://github.com/binbat/live777/issues/39
 webrtc = { git = "https://github.com/webrtc-rs/webrtc", rev = "3f34e2e055463e88f5e68ef09f98f9c5c674ff42" }
 anyhow = { version = "1", features = ["backtrace"] }
 tokio = { version = "1.36", features = ["full"] }
@@ -52,7 +49,7 @@ section = "utility"
 priority = "optional"
 assets = [
     [
-        "target/release/live777",
+        "target/release/livestream707",
         "usr/bin/",
         "755",
     ],
@@ -68,17 +65,17 @@ assets = [
     ],
     [
         "config-dist.toml",
-        "etc/live777/config.toml",
+        "etc/livestream707/config.toml",
         "644",
     ],
     [
-        "live777.service",
-        "usr/lib/systemd/system/live777.service",
+        "livestream707.service",
+        "usr/lib/systemd/system/livestream707.service",
         "644",
     ],
     [
         "README.md",
-        "usr/share/doc/live777/README",
+        "usr/share/doc/livestream707/README",
         "644",
     ],
 ]
