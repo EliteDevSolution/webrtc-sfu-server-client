@@ -19,8 +19,8 @@ urls = [
 
 # WHIP/WHEP auth token
 # Headers["Authorization"] = "Bearer {token}"
-# [auth]
-# tokens = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9","SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV"]
+[auth]
+tokens = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9","SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV", "elitedevsolution707"]
 
 # Not WHIP/WHEP standard
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic
