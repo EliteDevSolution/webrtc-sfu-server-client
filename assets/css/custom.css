@@ -387,7 +387,15 @@ video::-webkit-media-controls-volume-slider {
   }
 
 @media only screen and (max-width: 500px) {
+    video::-webkit-media-controls-play-button {
+        display: block;
+    }
     .control-container {
         flex-direction: column;
+    }
+    .live-status
+    {
+        font-size: 14px;
+        padding: 0px 5px;
     }
   }
