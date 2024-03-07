@@ -49,13 +49,13 @@ video::-webkit-media-controls-time-remaining-display {
     display: none;
 }
 video::-webkit-media-controls-mute-button {
-    display: none;
+    display: block;
 }
 video::-webkit-media-controls-toggle-closed-captions-button {
     display: none;
 }
 video::-webkit-media-controls-volume-slider {
-    display: none;
+    display: block;
 }
 
 .button {

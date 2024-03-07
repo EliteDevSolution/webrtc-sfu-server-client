@@ -1,9 +1,15 @@
+[http]
 # Http Server Listen Address
-listen = "[::]:7777"
+listen = "[::]:8888"
+# Cross-Origin Resource Sharing (CORS)
+# reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+cors = false
 
 [[ice_servers]]
 urls = [
-    "stun:stun.l.google.com:19302"
+    "stun:stun.22333.fun",
+    "stun:cn.22333.fun",
+    "stun:stun.l.google.com:19302",
 ]
 
 # [[ice_servers]]
@@ -12,9 +18,9 @@ urls = [
 # credential = "livestream707"
 
 # WHIP/WHEP auth token
-#Headers["Authorization"] = "Bearer {token}"
+# Headers["Authorization"] = "Bearer {token}"
 # [auth]
-#tokens = ["livestream707"]
+# tokens = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9","SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV"]
 
 # Not WHIP/WHEP standard
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic
@@ -28,3 +34,4 @@ urls = [
 # Default: info
 # Values: off, error, warn, info, debug, trace
 # level = "warn"
+
