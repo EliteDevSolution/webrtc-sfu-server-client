@@ -4,93 +4,105 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="icon" href="./favicon.ico"/>
-    <title>Streaming Video</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
+    <link rel="icon" href="./logo.svg"/>
+    <title>Live777</title>
+    <style>
+        fieldset {
+            border-style: dotted;
+            border-width: 0.25rem;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            margin: 0.5rem;
+        }
+    </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="javascript:void(0)">Streaming Video</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mynavbar">
-                <ul class="navbar-nav me-auto">
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)">Viewer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)">Server</a>
-                    </li> -->
-                </ul>
-                <div class="d-flex gap-1">
-                    <input id="resource" class="form-control me-2" type="text" placeholder="Channel ID..." />
-                    <input id="token" class="form-control me-2" type="text" placeholder="Bearer Token..." />
-                    <button id="whep-button-start" onclick="startWhep()" class="btn btn-outline-success">Connect</button>
-                    <button id="whep-button-stop" class="btn btn-outline-warning">Disconnect</button>
-                    <button id="whep-button-disable-audio" class="btn btn-outline-danger d-none">Disable Audio</button>
-                    <button id="whep-button-disable-video" class="btn btn-outline-danger d-none">Disable Video</button>
-                    <a href="/"><button id="btn-reset" class="btn btn-danger" type="button">Reset</button></a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <div class="container-fluid">
-        <div class="justify-content-center d-flex">
-            <div class="col-sm-6 p-3">
-                <section>
-                    <select onchange="selectWidthValue(this.value)" class="d-none">
-                        <option value="320px">320px</option>
-                        <option value="480px">480px</option>
-                        <option value="600px">600px</option>
-                        <option value="1280px">1280px</option>
-                        <option value="1920px">1920px</option>
-                        <option value="auto">auto</option>
-                    </select>
-                </section>
-                <section>
-                    <debug-player controls autoplay id="whep-video-player"></debug-player>
-                    <div>
-                        <div style="position: relative;" id="video-content">
-                            <video autoplay="" controls poster="/image/video_bg.jpg" id="video" style="width: 100%; height: auto; border-radius: 5px;"></video>
-                            <div id="btn-play-stop" class="button btn-play-stop fade-in active" style="display: none;">
-                                <div class="background" x="0" y="0" width="200" height="200"></div>
-                                <div class="icon" width="200" height="200">
-                                  <div class="part left" x="0" y="0" width="200" height="200" fill="#fff"></div>
-                                  <div class="part right" x="0" y="0" width="200" height="200" fill="#fff"></div>
-                                </div>
-                                <div class="pointer"></div>
-                            </div>
-                            <div class="live-status live-status-off">
-                                <span class="live-status-span live-status-span-off"></span>
-                                <label class="live-status-title">Offline</label>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </div>
-    </div>
-    <div class="d-none">
+<fieldset>
+    <legend>Common</legend>
+    <section style="display: flex;justify-content: space-evenly;flex-wrap: wrap;">
+        <div>Resource ID: <input id="resource" type="text"/></div>
+        <div>Bearer Token: <input id="token" type="text"/></div>
+    </section>
+</fieldset>
+
+<div style="display: flex;justify-content: space-evenly;flex-wrap: wrap;">
+    <fieldset>
+        <legend>WHIP</legend>
+        <center>
+        <section>
+            <button id="whip-device-button" onclick="refreshDevice()">Use Device</button>
+            <br/>Audio Device: <select id="whip-audio-device"><option value="">none</option></select>
+            <br/>Video Device: <select id="whip-video-device"><option value="">none</option></select>
+        </section>
+
+        <section>
+            Audio Codec: <select id="whip-audio-codec">
+            <option value="" selected>default</option>
+            <option value="opus/48000">OPUS</option>
+            <option value="g722/8000">G722</option>
+        </select>
+            Video Codec: <select id="whip-video-codec">
+            <option value="" selected>default</option>
+            <option value="av1/90000">AV1</option>
+            <option value="vp9/90000">VP9</option>
+            <option value="vp8/90000">VP8</option>
+            <option value="h264/90000">H264</option>
+        </select>
+        </section>
+        <section>
+            <video-size-select id="whip-video-size"></video-size-select>
+        </section>
+        <section>SVC Layer: <select id="whip-layer-select"></select></section>
+        <section>
+            <input type="checkbox" id="whip-pseudo-audio"/>Pseudo Audio Track
+        </section>
+        <section>
+            <button onclick="startWhip()">Start</button>
+            <button id="whip-button-stop">Stop</button>
+        </section>
+
+        <section>
+            <h3>WHIP Video:</h3>
+            <debug-player controls autoplay id="whip-video-player"></debug-player>
+        </section>
+        <section>
+            <data-channel id="whip-datachannel"></data-channel>
+        </section>
+        <br/>Logs: <br/>
+        <div id="whip-logs"></div>
+        <center>
+    </fieldset>
+
+    <fieldset>
+        <legend>WHEP</legend>
+        <center>
+        <section>SVC Layer: <select disabled id="whep-layer-select"></select></section>
+        <section>
+            <button id="whep-button-disable-audio">Disable Audio</button>
+            <button id="whep-button-disable-video">Disable Video</button>
+        </section>
+        <section>
+            <button onclick="startWhep()">Start</button>
+            <button id="whep-button-stop">Stop</button>
+        </section>
+
+        <section>
+            <h3>WHEP Video:</h3>
+            <debug-player controls autoplay id="whep-video-player"></debug-player>
+        </section>
         <section>
             <data-channel id="whep-datachannel"></data-channel>
         </section>
-        <div id="whep-logs" style="height: 450px; overflow: auto; border: 2px solid #d9d9d9; padding: 10px; margin-top: 20px;"></div>
-    </div>
-</body>
-<script src="js/jquery.min.js"></script>
-<script>
-    function selectWidthValue(value){
-        const video = document.getElementById("video");
-        video.style.width = value;
-    }
-
-</script>
+        <br/>Logs: <br/>
+        <div id="whep-logs"></div>
+        </center>
+    </fieldset>
+</div>
 <script type="module">
-    import convertSessionDescription from "./js/sdp.js"
-    import {WHEPClient} from "./js/whep.js"
+    import convertSessionDescription from "./sdp.js"
+    import {WHIPClient} from "./whip.js"
+    import {WHEPClient} from "./whep.js"
 
     import VideoSizeSelectElement from "./components/video-size-select.js"
     import DebugPlayer from "./components/debug-player.js"
@@ -130,6 +142,10 @@
         el.innerHTML += (!!num ? `[${num}]: ` : '') + msg + '<br>'
     }
 
+    function logWhip(num, msg) {
+        log(document.getElementById('whip-logs'), num, msg)
+    }
+
     function logWhep(num, msg) {
         log(document.getElementById('whep-logs'), num, msg)
     }
@@ -139,6 +155,11 @@
         return el ? el.value : ""
     }
 
+    // NOTE:
+    // https://github.com/livekit/client-sdk-js/blob/761711adb4195dc49a0b32e1e4f88726659dac94/src/room/track/LocalVideoTrack.ts#L492
+    // - f: HIGH
+    // - h: MEDIUM
+    // - q: LOW
     const layers = [
         {rid: 'q', scaleResolutionDownBy: 4.0, scalabilityMode: 'L1T3'},
         {rid: 'h', scaleResolutionDownBy: 2.0, scalabilityMode: 'L1T3'},
@@ -155,6 +176,132 @@
         })
     }
 
+    // WHIP
+    let whipNum = 0
+
+    const idWhipLayerSelect = "whip-layer-select"
+    const idWhipAudioCodec = "whip-audio-codec"
+    const idWhipVideoCodec = "whip-video-codec"
+    const idWhipAudioDevice = "whip-audio-device"
+    const idWhipVideoDevice = "whip-video-device"
+    const idWhipVideoSize = "whip-video-size"
+    const idWhipButtonStop = "whip-button-stop"
+    const idWhipPseudoAudio = "whip-pseudo-audio"
+    const idWhipDataChannel = "whip-datachannel"
+
+    initLayerSelect(idWhipLayerSelect, [
+        {value: "f", text: "Base"},
+        {value: "h", text: "Base + 1/2"},
+        {value: "q", text: "Base + 1/2 + 1/4"},
+    ])
+
+    async function refreshDevice() {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        mediaStream.getTracks().map(track => track.stop())
+
+        const devices = (await navigator.mediaDevices.enumerateDevices()).filter(i => !!i.deviceId)
+        initLayerSelect(idWhipAudioDevice, devices.filter(i => i.kind === 'audioinput').map(i => {
+            return {value: i.deviceId, text: i.label}
+        }))
+        initLayerSelect(idWhipVideoDevice, devices.filter(i => i.kind === 'videoinput').map(i => {
+            return {value: i.deviceId, text: i.label}
+        }))
+    }
+
+    window.refreshDevice = () => {
+        refreshDevice()
+        document.getElementById("whip-device-button").disabled = true
+    }
+
+    async function startWhip() {
+        const resource = getElementValue(idResourceId)
+        if (!resource) {
+            alert("input resource")
+            return
+        }
+        const num = whipNum++
+        logWhip(num, "started")
+        const videoSize = document.getElementById(idWhipVideoSize).params
+        document.getElementById(idWhipVideoSize).disabled = true
+        logWhip(num, `video width: ${!videoSize.width ? "default" : videoSize.width}, height: ${!videoSize.height ? "default" : videoSize.height}`)
+
+        const audioDevice = getElementValue(idWhipAudioDevice)
+        const videoDevice = getElementValue(idWhipVideoDevice)
+        logWhip(num, `audio device: ${!audioDevice ? "none" : audioDevice}`)
+        logWhip(num, `video device: ${!videoDevice ? "none" : videoDevice}`)
+
+        let stream
+        if (!audioDevice && !videoDevice) {
+            stream = await navigator.mediaDevices.getDisplayMedia({audio: false, video: videoSize})
+        } else {
+            stream = await navigator.mediaDevices.getUserMedia({
+                audio: {deviceId: audioDevice},
+                video: {deviceId: videoDevice, ...videoSize}
+            })
+        }
+
+        const el = document.getElementById("whip-video-player")
+        if (el) el.srcObject = stream
+
+        const pc = new RTCPeerConnection()
+
+        // NOTE:
+        // 1. Live777 Don't support label
+        // 2. Live777 Don't support negotiated
+        document.getElementById(idWhipDataChannel).dataChannel = pc.createDataChannel("")
+
+        pc.oniceconnectionstatechange = e => logWhip(num, pc.iceConnectionState)
+
+        const layer = getElementValue(idWhipLayerSelect)
+        const index = layers.findIndex(i => i.rid === layer)
+
+        pc.addTransceiver(stream.getVideoTracks()[0], {
+            direction: 'sendonly',
+            sendEncodings: layers.slice(0 - (layers.length - index)),
+        })
+
+        if (document.getElementById(idWhipPseudoAudio).checked) {
+            pc.addTransceiver('audio', { 'direction': 'sendonly' })
+        } else {
+            stream.getAudioTracks().map(track => pc.addTrack(track))
+        }
+
+        const audioCodec = getElementValue(idWhipAudioCodec)
+        document.getElementById(idWhipAudioCodec).disabled = true
+        logWhip(num, `audio codec: ${!audioCodec ? "default" : audioCodec}`)
+
+        const videoCodec = getElementValue(idWhipVideoCodec)
+        document.getElementById(idWhipVideoCodec).disabled = true
+        logWhip(num, `video codec: ${!videoCodec ? "default" : videoCodec}`)
+
+        const whip = new WHIPClient()
+        whip.onAnswer = answer => convertSessionDescription(answer, audioCodec, videoCodec)
+
+        const url = location.origin + "/whip/" + resource
+        const token = getElementValue(idBearerToken)
+        try {
+            logWhip(num, "http begined")
+            await whip.publish(pc, url, token)
+        } catch (e) {
+            logWhip(num, e)
+        }
+
+        const stop = async () => {
+            await whip.stop()
+            logWhip(num, "stopped")
+            stream.getTracks().map(track => track.stop())
+
+            if (el) el.srcObject = null
+        }
+
+        const element = document.getElementById(idWhipButtonStop)
+        if (element) element.addEventListener('click', stop)
+
+        document.getElementById(idWhipLayerSelect).disabled = true
+    }
+
+    window.startWhip = startWhip
+
     // WHEP
     let whepNum = 0
 
@@ -163,22 +310,6 @@
     const idWhepButtonDisableAudio = "whep-button-disable-audio"
     const idWhepButtonDisableVideo = "whep-button-disable-video"
     const idWhepDataChannel = "whep-datachannel"
-
-    document.getElementById('whep-button-stop').disabled = true;
-
-    const video = document.querySelector('#video-content');
-    const playStopElement = document.getElementById('btn-play-stop')
-
-    $('#video-content').hover(() => {
-        if (document.getElementById('whep-button-start').disabled) {
-            $('.btn-play-stop').fadeIn("slow");
-        }
-    }, () => {
-        if (document.getElementById('whep-button-start').disabled) {
-            $('.btn-play-stop').fadeOut("fast");
-        }
-    });
-    //video.controls = false;
 
     initLayerSelect(idWhepLayerSelect, [
         {value: "", text: "AUTO"},
@@ -194,13 +325,14 @@
             return
         }
         const num = whepNum++
-        logWhep(num, "Started")
+        logWhep(num, "started")
         const pc = new RTCPeerConnection()
 
         // NOTE:
-        // 1. Don't support label
-        // 2. Don't support negotiated
+        // 1. Live777 Don't support label
+        // 2. Live777 Don't support negotiated
         document.getElementById(idWhepDataChannel).dataChannel = pc.createDataChannel("")
+
         pc.oniceconnectionstatechange = e => logWhep(num, pc.iceConnectionState)
         pc.addTransceiver('video', {'direction': 'recvonly'})
         pc.addTransceiver('audio', {'direction': 'recvonly'})
@@ -215,43 +347,16 @@
         const token = getElementValue(idBearerToken)
 
         try {
-            logWhep(num, "Http begined")
-            document.getElementById('whep-button-start').disabled = true;
-            document.getElementById('whep-button-stop').disabled = false;
+            logWhep(num, "http begined")
             await whep.view(pc, url, token)
         } catch (e) {
-            document.getElementById('whep-button-start').disabled = false;
-            document.getElementById('whep-button-stop').disabled = true;
-            $('.live-status').removeClass('live-status-on').addClass('live-status-off');
-            $('.live-status-title').text('Offline');
             logWhep(num, e)
         }
 
         const element = document.getElementById(idWhepButtonStop)
         if (element) element.addEventListener('click', async () => {
             await whep.stop()
-            document.getElementById('whep-button-start').disabled = false;
-            document.getElementById('whep-button-stop').disabled = true;
-            $('.live-status').removeClass('live-status-on').addClass('live-status-off');
-            $('.live-status-title').text('Offline');
-        })
-
-        if (playStopElement) playStopElement.addEventListener('click', async () => {
-            if(playStopElement.classList.contains('active')) {
-                try {
-                    await whep.mute({ kind: "audio", enabled: false })
-                    await whep.mute({ kind: "video", enabled: false })
-                    playStopElement.classList.remove('active');
-                } catch (e) {
-                }
-            } else {
-                try {
-                    await whep.mute({ kind: "audio", enabled: true })
-                    await whep.mute({ kind: "video", enabled: true })
-                    playStopElement.classList.add('active');
-                } catch (e) {
-                }
-            }
+            logWhep(num, "stopped")
         })
 
         const buttonDisableAudio = document.getElementById(idWhepButtonDisableAudio)
@@ -284,4 +389,6 @@
 
     window.startWhep = startWhep
 </script>
+</body>
+
 </html>

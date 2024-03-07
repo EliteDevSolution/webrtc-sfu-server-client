@@ -385,3 +385,9 @@ video::-webkit-media-controls-volume-slider {
       56.87342% 42.46916%
     );
   }
+
+@media only screen and (max-width: 500px) {
+    .control-container {
+        flex-direction: column;
+    }
+  }

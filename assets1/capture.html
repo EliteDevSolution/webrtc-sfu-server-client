@@ -65,6 +65,7 @@
         <section>
             <h3>WHIP Video:</h3>
             <debug-player controls autoplay id="whip-video-player"></debug-player>
+            <video autoplay="" controls poster="/image/video_bg.jpg" id="video" style="width: 100%; height: auto; border-radius: 5px;"></video>
         </section>
         <section>
             <data-channel id="whip-datachannel"></data-channel>
@@ -100,9 +101,9 @@
     </fieldset>
 </div>
 <script type="module">
-    import convertSessionDescription from "./sdp.js"
-    import {WHIPClient} from "./whip.js"
-    import {WHEPClient} from "./whep.js"
+    import convertSessionDescription from "./js/sdp.js"
+    import {WHIPClient} from "./js/whip.js"
+    import {WHEPClient} from "./js/whep.js"
 
     import VideoSizeSelectElement from "./components/video-size-select.js"
     import DebugPlayer from "./components/debug-player.js"
