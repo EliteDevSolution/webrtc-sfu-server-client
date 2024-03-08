@@ -89,7 +89,10 @@
     }
     $('#btn-reset').click(function(evt){
         location.reload();
-    })
+    });
+
+    document.querySelector('video').addEventListener('click', (e) => e.preventDefault() )
+
 
 </script>
 <script type="module">
@@ -173,15 +176,6 @@
     const video = document.querySelector('#video-content');
     const playStopElement = document.getElementById('btn-play-stop')
 
-    $('#video-content').hover(() => {
-        if (document.getElementById('whep-button-start').disabled) {
-            $('.btn-play-stop').fadeIn("slow");
-        }
-    }, () => {
-        if (document.getElementById('whep-button-start').disabled) {
-            $('.btn-play-stop').fadeOut("fast");
-        }
-    });
     //video.controls = false;
 
     initLayerSelect(idWhepLayerSelect, [
@@ -264,19 +258,28 @@
             $('.live-status-title').text('Not live');
         })
 
+        $('#video-content').hover(() => {
+            if (document.getElementById('whep-button-start').disabled && playStopElement.classList.contains('active')) {
+                $('.btn-play-stop').fadeIn("slow");
+            }
+        }, () => {
+            if (document.getElementById('whep-button-start').disabled && playStopElement.classList.contains('active')) {
+                $('.btn-play-stop').fadeOut("fast");
+            }
+        });
+
         if (playStopElement) playStopElement.addEventListener('click', async () => {
             if(playStopElement.classList.contains('active')) {
                 try {
-                    await whep.mute({ kind: "audio", enabled: false })
-                    await whep.mute({ kind: "video", enabled: false })
                     playStopElement.classList.remove('active');
+                    $('#video').get(0).pause();
+                    $('.btn-play-stop').fadeIn("slow");
                 } catch (e) {
                 }
             } else {
                 try {
-                    await whep.mute({ kind: "audio", enabled: true })
-                    await whep.mute({ kind: "video", enabled: true })
                     playStopElement.classList.add('active');
+                    $('#video').get(0).play();
                 } catch (e) {
                 }
             }
