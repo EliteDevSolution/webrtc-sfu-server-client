@@ -49,7 +49,9 @@ mod forward;
 mod metrics;
 mod path;
 mod signal;
+use std::ffi::OsString;
 use std::io;
+use std::path::PathBuf;
 
 #[tokio::main]
 async fn main() {
@@ -120,7 +122,11 @@ async fn main() {
 
 /// Load an HTML file and create an HTTP response
 async fn viewer() -> Result<Html<String>, (StatusCode, String)> {
-    match read_html_file("assets/viewer.html").await {
+    let viewer_path = PathBuf::from("assets/viewer.html").into_os_string();
+    // Print the file path
+    println!("Media directory path: {:?}", media_path);
+    //let viewer_dir = ServeFile::new("assets/viewer.html");
+    match read_html_file(viewer_path).await {
         Ok(html_content) => Ok(Html(html_content)),
         Err(e) => Err((
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -130,7 +136,7 @@ async fn viewer() -> Result<Html<String>, (StatusCode, String)> {
 }
 
 /// Helper function to read HTML file from the filesystem
-async fn read_html_file(path: &str) -> io::Result<String> {
+async fn read_html_file(path: OsString) -> io::Result<String> {
     tokio::fs::read_to_string(path).await
 }
 
