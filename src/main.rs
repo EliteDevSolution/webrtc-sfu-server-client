@@ -127,15 +127,18 @@ async fn main() {
 }
 
 async fn embed_handler() -> impl IntoResponse {
-    let viewer_path = PathBuf::from("assets/embed.html").into_os_string();
-    // Print the file path
-    //let viewer_dir = ServeFile::new("assets/viewer.html");
-    match read_html_file(viewer_path).await {
-        Ok(html_content) => Ok(Html(html_content)),
-        Err(e) => Err((
-            StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to read HTML file: {}", e),
-        )),
+    #[cfg(debug_assertions)]
+    {
+        let viewer_path = PathBuf::from("assets/embed.html").into_os_string();
+        // Print the file path
+        //let viewer_dir = ServeFile::new("assets/viewer.html");
+        match read_html_file(viewer_path).await {
+            Ok(html_content) => Ok(Html(html_content)),
+            Err(e) => Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to read HTML file: {}", e),
+            )),
+        }
     }
 }
 
