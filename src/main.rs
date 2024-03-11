@@ -2,12 +2,14 @@ use axum::body::{Body, Bytes};
 use axum::extract::Request;
 use axum::http::HeaderMap;
 use axum::middleware::Next;
+#[cfg(debug_assertions)]
+use axum::response::Html;
 use axum::routing::get;
 use axum::Json;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
-    response::{Html, IntoResponse, Response},
+    response::{IntoResponse, Response},
     routing::post,
     Router,
 };
@@ -49,8 +51,11 @@ mod forward;
 mod metrics;
 mod path;
 mod signal;
+#[cfg(debug_assertions)]
 use std::ffi::OsString;
+#[cfg(debug_assertions)]
 use std::io;
+#[cfg(debug_assertions)]
 use std::path::PathBuf;
 
 #[tokio::main]
@@ -147,6 +152,7 @@ async fn viewer_handler() -> impl IntoResponse {
     }
 }
 
+#[cfg(debug_assertions)]
 /// Helper function to read HTML file from the filesystem
 async fn read_html_file(path: OsString) -> io::Result<String> {
     tokio::fs::read_to_string(path).await
