@@ -98,7 +98,7 @@ async fn main() {
         )
         .layer(auth_layer)
         .route("/metrics", get(metrics))
-        .route("/viewer", get(viewer))
+        .route("/viewer", get(viewer_handler))
         .with_state(app_state)
         .layer(axum::middleware::from_fn(print_request_response))
         .layer(
@@ -120,17 +120,30 @@ async fn main() {
     info!("Server shutdown");
 }
 
-/// Load an HTML file and create an HTTP response
-async fn viewer() -> Result<Html<String>, (StatusCode, String)> {
-    let viewer_path = PathBuf::from("assets/viewer.html").into_os_string();
-    // Print the file path
-    //let viewer_dir = ServeFile::new("assets/viewer.html");
-    match read_html_file(viewer_path).await {
-        Ok(html_content) => Ok(Html(html_content)),
-        Err(e) => Err((
-            StatusCode::INTERNAL_SERVER_ERROR,
-            format!("Failed to read HTML file: {}", e),
-        )),
+async fn viewer_handler() -> impl IntoResponse {
+    #[cfg(debug_assertions)]
+    {
+        let viewer_path = PathBuf::from("assets/viewer.html").into_os_string();
+        // Print the file path
+        //let viewer_dir = ServeFile::new("assets/viewer.html");
+        match read_html_file(viewer_path).await {
+            Ok(html_content) => Ok(Html(html_content)),
+            Err(e) => Err((
+                StatusCode::INTERNAL_SERVER_ERROR,
+                format!("Failed to read HTML file: {}", e),
+            )),
+        }
+    }
+
+    #[cfg(not(debug_assertions))]
+    {
+        match Assets::get("viewer.html") {
+            Some(content) => {
+                let mime = mime_guess::from_path("viewer.html").first_or_octet_stream();
+                ([(header::CONTENT_TYPE, mime.as_ref())], content.data).into_response()
+            }
+            None => (StatusCode::NOT_FOUND, "not found").into_response(),
+        }
     }
 }
 
