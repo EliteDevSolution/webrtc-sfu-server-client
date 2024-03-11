@@ -398,8 +398,8 @@ export class WHIPClient
         this.pc = null;
 
         //If we don't have the resource url
-        if (!this.resourceURL)
-        throw new Error("WHIP resource url not available yet");
+        // if (!this.resourceURL)
+        // throw new Error("WHIP resource url not available yet");
 
         //Request headers
         const headers = {

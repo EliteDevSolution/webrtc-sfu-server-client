@@ -7,10 +7,11 @@ use axum::Json;
 use axum::{
     extract::{Path, State},
     http::StatusCode,
-    response::{IntoResponse, Response},
+    response::{Html, IntoResponse, Response},
     routing::post,
     Router,
 };
+
 use forward::info::Layer;
 use http::header::ToStrError;
 use http::Uri;
@@ -25,6 +26,7 @@ use thiserror::Error;
 use tower_http::services::{ServeDir, ServeFile};
 use tower_http::trace::TraceLayer;
 use tower_http::validate_request::ValidateRequestHeaderLayer;
+
 use tracing::info_span;
 use tracing::{debug, error, info};
 use tracing_subscriber::layer::SubscriberExt;
@@ -47,6 +49,7 @@ mod forward;
 mod metrics;
 mod path;
 mod signal;
+use std::io;
 
 #[tokio::main]
 async fn main() {
@@ -93,6 +96,7 @@ async fn main() {
         )
         .layer(auth_layer)
         .route("/metrics", get(metrics))
+        .route("/viewer", get(viewer))
         .with_state(app_state)
         .layer(axum::middleware::from_fn(print_request_response))
         .layer(
@@ -114,6 +118,23 @@ async fn main() {
     info!("Server shutdown");
 }
 
+/// Load an HTML file and create an HTTP response
+async fn viewer() -> Result<Html<String>, (StatusCode, String)> {
+    match read_html_file("assets/viewer.html").await {
+        Ok(html_content) => Ok(Html(html_content)),
+        Err(e) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to read HTML file: {}", e),
+        )),
+    }
+}
+
+/// Helper function to read HTML file from the filesystem
+async fn read_html_file(path: &str) -> io::Result<String> {
+    tokio::fs::read_to_string(path).await
+}
+
+// Define the `metrics` function
 async fn metrics() -> String {
     metrics::ENCODER
         .encode_to_string(&metrics::REGISTRY.gather())

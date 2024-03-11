@@ -141,7 +141,6 @@ export class WHEPClient extends EventTarget
         this.eventsUrl =  new URL(links[Extensions.Core.ServerSentEvents][0].url, url);
         if (links.hasOwnProperty(Extensions.Core.Layer))
         this.layerUrl  = new URL(links[Extensions.Core.Layer][0].url, url);
-
         //If we have an event url
         if (this.eventsUrl)
         {
@@ -159,7 +158,7 @@ export class WHEPClient extends EventTarget
             headers["Authorization"] = "Bearer " + this.token;
 
             //Do the post request to the whep resource
-        fetch(this.eventsUrl, {
+            fetch(this.eventsUrl, {
                 method  : "POST",
                 body    : JSON.stringify(events),
                 headers
@@ -492,8 +491,8 @@ export class WHEPClient extends EventTarget
         this.pc = null;
 
         //If we don't have the resource url
-        if (!this.resourceURL)
-        throw new Error("WHEP resource url not available yet");
+        // if (!this.resourceURL)
+        // throw new Error("WHEP resource url not available yet");
 
         //Request headers
         const headers = {

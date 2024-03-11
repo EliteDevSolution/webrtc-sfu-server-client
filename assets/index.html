@@ -50,12 +50,7 @@
                     </div>
                     <div>
                         <div style="position: relative;" id="video-content">
-                            <video autoplay="" controls poster="/image/video_bg.jpg" id="video" style="width: 100%; height: auto; border-radius: 5px;">
-                                <track
-                                    id="audio-content"
-                                    kind="audio"
-                                 />
-                            </video>
+                            <video autoplay="" controls poster="/image/video_bg.jpg" id="video" style="width: 100%; height: auto; border-radius: 5px;"></video>
                             <div id="btn-play-stop" class="button btn-play-stop fade-in active" style="display: none;">
                                 <div class="background" x="0" y="0" width="200" height="200"></div>
                                 <div class="icon" width="200" height="200">
@@ -168,6 +163,7 @@
     const idWhepButtonDisableAudio = "whep-button-disable-audio"
     const idWhepButtonDisableVideo = "whep-button-disable-video"
     const idWhepDataChannel = "whep-datachannel"
+    let startWhepInterval = null;
 
     document.getElementById('whep-button-stop').disabled = true;
 
@@ -183,10 +179,10 @@
         {value: "f", text: "HIGH"},
     ])
 
-    async function startWhep() {
+    async function startWhep(type = 0) {
         const resource = getElementValue(idResourceId)
         if (!resource) {
-            alert("input resource")
+            $('#resource').focus();
             return
         }
         const num = whepNum++
@@ -198,7 +194,18 @@
         // 2. Don't support negotiated
         document.getElementById(idWhepDataChannel).dataChannel = pc.createDataChannel("")
 
-        pc.oniceconnectionstatechange = e => logWhep(num, pc.iceConnectionState)
+        pc.oniceconnectionstatechange = (e) => {
+            const connectionStatus = pc.iceConnectionState;
+            if(connectionStatus === 'checking' || connectionStatus === 'connected')
+            {
+                clearInterval(startWhepInterval);
+            }
+            if(connectionStatus === 'disconnected' && $('#whep-button-start').prop('disabled'))
+            {
+                startWhepInterval = setInterval(() => startWhep(1), 3000);
+            }
+            logWhep(num, connectionStatus);
+        }
         pc.addTransceiver('video', {'direction': 'recvonly'})
         pc.addTransceiver('audio', {'direction': 'recvonly'})
         const videoPlayer = document.getElementById("video");
@@ -234,14 +241,21 @@
 
         try {
             logWhep(num, "Http begined")
-            document.getElementById('whep-button-start').disabled = true;
-            document.getElementById('whep-button-stop').disabled = false;
+            if(type === 0)
+            {
+                document.getElementById('whep-button-start').disabled = true;
+                document.getElementById('whep-button-stop').disabled = false;
+            }
             await whep.view(pc, url, token)
             $('.live-status').removeClass('live-status-off').addClass('live-status-on');
             $('.live-status-title').text('Live');
+            clearInterval(startWhepInterval);
         } catch (e) {
-            document.getElementById('whep-button-start').disabled = false;
-            document.getElementById('whep-button-stop').disabled = true;
+            if(type === 0)
+            {
+                document.getElementById('whep-button-start').disabled = false;
+                document.getElementById('whep-button-stop').disabled = true;
+            }
             $('.live-status').removeClass('live-status-on').addClass('live-status-off');
             $('.live-status-title').text('Not live');
             logWhep(num, e)
@@ -310,7 +324,6 @@
             initEvevt()
         }
     }
-
     window.startWhep = startWhep
 </script>
 </html>

@@ -33,6 +33,10 @@
     background-color: rgb(255, 255, 255);
 }
 
+video {
+    outline: none;
+}
+
 video::-webkit-media-controls-fullscreen-button {
     display: block;
 }
