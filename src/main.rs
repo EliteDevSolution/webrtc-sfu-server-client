@@ -104,6 +104,7 @@ async fn main() {
         .layer(auth_layer)
         .route("/metrics", get(metrics))
         .route("/viewer", get(viewer_handler))
+        .route("/embed", get(embed_handler))
         .with_state(app_state)
         .layer(axum::middleware::from_fn(print_request_response))
         .layer(
@@ -123,6 +124,19 @@ async fn main() {
         msg = signal::wait_for_stop_signal() => debug!("Received signal: {}", msg),
     }
     info!("Server shutdown");
+}
+
+async fn embed_handler() -> impl IntoResponse {
+    let viewer_path = PathBuf::from("assets/embed.html").into_os_string();
+    // Print the file path
+    //let viewer_dir = ServeFile::new("assets/viewer.html");
+    match read_html_file(viewer_path).await {
+        Ok(html_content) => Ok(Html(html_content)),
+        Err(e) => Err((
+            StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Failed to read HTML file: {}", e),
+        )),
+    }
 }
 
 async fn viewer_handler() -> impl IntoResponse {
