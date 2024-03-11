@@ -134,7 +134,6 @@ export class WHEPClient extends EventTarget
                 }
             }
         }
-
         //Get extensions url
         if (links.hasOwnProperty(Extensions.Core.ServerSentEvents))
         //Get url

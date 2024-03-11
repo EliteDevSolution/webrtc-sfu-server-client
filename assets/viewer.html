@@ -122,7 +122,7 @@
             return
         }
 
-        const num = whepNum++
+        const num = 1;
         logWhep(num, "Started")
         const pc = new RTCPeerConnection()
         // NOTE:
@@ -186,30 +186,6 @@
             }
             logWhep(num, `track: ${ev.track.kind}`)
         }
-        var senders = await pc.getSenders();
-        console.log(senders);
-
-        // Get the real-time viewer count
-//   setInterval(function() {
-//     // Get the array of RTCRtpSender objects
-//     var senders = pc.getSenders();
-
-//     // Initialize the viewer count
-//     var viewerCount = 0;
-
-//     // Iterate over the array of RTCRtpSender objects
-//     for (var i = 0; i < senders.length; i++) {
-//       var sender = senders[i];
-
-//       // Check if the media track is ready
-//       if (sender?.transport?.state === "connected") {
-//         viewerCount++;
-//       }
-//     }
-
-//     // Do something with the viewer count
-//     console.log("Viewer count: " + viewerCount);
-//   }, 2000);
 
         try {
             logWhep(num, "Http begined")
