@@ -124,7 +124,6 @@ async fn main() {
 async fn viewer() -> Result<Html<String>, (StatusCode, String)> {
     let viewer_path = PathBuf::from("assets/viewer.html").into_os_string();
     // Print the file path
-    println!("Media directory path: {:?}", media_path);
     //let viewer_dir = ServeFile::new("assets/viewer.html");
     match read_html_file(viewer_path).await {
         Ok(html_content) => Ok(Html(html_content)),
