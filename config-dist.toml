@@ -36,7 +36,7 @@ password = "eyJhbGciOiJA54stf3IUzI1NiIsInR5cCI6IkpXVCJ935A707"
 # level = "warn"
 
 [database]
-host = "191.96.31.104"
+host = "localhost"
 port = "3306"
 username = "root"
 password = "Workanaciaob2xbet@"
