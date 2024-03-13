@@ -172,14 +172,14 @@
             if (ev.track.kind === "video") {
                 if (ev.streams.length !== 0)
                 {
-                    stream.addTrack(event.streams[0].getVideoTracks()[0]);
+                    stream.addTrack(ev.streams[0].getVideoTracks()[0]);
                     cntFlag++;
                 }
             }
             if (ev.track.kind === "audio") {
                 if (ev.streams.length !== 0)
                 {
-                    stream.addTrack(event.streams[0].getAudioTracks()[0]);
+                    stream.addTrack(ev.streams[0].getAudioTracks()[0]);
                     cntFlag++;
                 }
             }

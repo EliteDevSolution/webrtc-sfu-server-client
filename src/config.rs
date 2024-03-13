@@ -16,6 +16,8 @@ pub struct Config {
     pub auth: Auth,
     #[serde(default = "default_log")]
     pub log: Log,
+    #[serde(default)]
+    pub database: Database,
 }
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Auth {
@@ -23,6 +25,20 @@ pub struct Auth {
     pub accounts: Vec<Account>,
     #[serde(default)]
     pub tokens: Vec<String>,
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Database {
+    #[serde(default)]
+    pub host: String,
+    #[serde(default)]
+    pub port: String,
+    #[serde(default)]
+    pub username: String,
+    #[serde(default)]
+    pub password: String,
+    #[serde(default)]
+    pub dbname: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -145,7 +161,7 @@ impl Config {
         if result.is_err() {
             result = fs::read_to_string("/etc/livestream707/config.toml");
         }
-        tracing::debug!("cfg111 = {result:?}");
+
         if let Ok(cfg) = result {
             let cfg: Self = toml::from_str(cfg.as_str()).expect("config parse error");
             match cfg.validate() {
@@ -158,6 +174,7 @@ impl Config {
                 listen: default_listen(),
                 auth: Default::default(),
                 log: default_log(),
+                database: Default::default(),
             }
         }
     }

@@ -6,6 +6,11 @@ use http::{header, Request, Response, StatusCode};
 use http_body::Body;
 use tower_http::validate_request::ValidateRequest;
 
+use mysql::prelude::*;
+use mysql::*;
+
+use crate::AppState;
+
 #[derive(Debug)]
 pub struct ManyValidate<ResBody> {
     header_values: HashSet<String>,
@@ -22,6 +27,7 @@ impl<ResBody> ManyValidate<ResBody> {
             let encoded = STANDARD.encode(format!("{}:{}", account.username, account.password));
             header_values.insert(format!("Basic {}", encoded).parse().unwrap());
         }
+
         for token in auth.tokens {
             header_values.insert(format!("Bearer {}", token).parse().unwrap());
         }
@@ -50,6 +56,22 @@ where
     fn validate(&mut self, request: &mut Request<B>) -> Result<(), Response<Self::ResponseBody>> {
         if self.header_values.is_empty() {
             return Ok(());
+        }
+        //println!("Validate\n");
+        //println!("{}", request.uri());
+        if let Some(state) = request.extensions().get::<AppState>() {
+            // Get a connection from the pool
+            let mut conn = state.dbpool.get_conn().unwrap();
+
+            // Fetch the table
+            let results: Result<Vec<Row>> = conn.query("SELECT * FROM tokens");
+            //let uri = request.uri().to_string();
+            // Print the rows
+            for row in results.unwrap() {
+                let token: String = row.get("token").expect("REASON");
+                self.header_values
+                    .insert(format!("Bearer {}", token).parse().unwrap());
+            }
         }
         match request.headers().get(header::AUTHORIZATION) {
             Some(actual) if self.header_values.contains(actual.to_str().unwrap()) => Ok(()),

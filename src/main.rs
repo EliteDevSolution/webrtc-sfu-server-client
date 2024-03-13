@@ -11,7 +11,7 @@ use axum::{
     http::StatusCode,
     response::{IntoResponse, Response},
     routing::post,
-    Router,
+    Extension, Router,
 };
 
 use forward::info::Layer;
@@ -58,6 +58,11 @@ use std::io;
 #[cfg(debug_assertions)]
 use std::path::PathBuf;
 
+use mysql::prelude::*;
+use mysql::*;
+
+use serde::Deserialize;
+
 #[tokio::main]
 async fn main() {
     metrics::REGISTRY
@@ -66,7 +71,7 @@ async fn main() {
     metrics::REGISTRY
         .register(Box::new(metrics::SUBSCRIBE.clone()))
         .unwrap();
-    let cfg = Config::parse();
+    let cfg: Config = Config::parse();
 
     tracing_subscriber::registry()
         .with(
@@ -75,6 +80,37 @@ async fn main() {
         )
         .with(tracing_logfmt::layer())
         .init();
+
+    //tracing::debug!("Configurations = {cfg:?}");
+
+    // Get the database connection details
+    let url = format!(
+        "mysql://{}:{}@{}:{}/{}",
+        cfg.database.username,
+        cfg.database.password,
+        cfg.database.host,
+        cfg.database.port,
+        cfg.database.dbname
+    )
+    .to_string();
+
+    // Create a connection pool
+    let opts = Opts::from_url(&url).unwrap();
+
+    // Create a connection pool
+    let pool = Pool::new(opts).expect("REASON");
+
+    // Get a connection from the pool
+    //let mut conn = pool.expect("REASON").get_conn().unwrap();
+
+    // Fetch the table
+    //let results: Result<Vec<Row>> = conn.query("SELECT * FROM tokens");
+
+    // // Print the rows
+    // for row in results.iter() {
+    //     println!("{:?}", row);
+    // }
+
     let addr = SocketAddr::from_str(&cfg.listen).expect("invalid listen address");
     info!("Server listening on {}", addr);
     let ice_servers = cfg
@@ -83,14 +119,17 @@ async fn main() {
         .into_iter()
         .map(|i| i.into())
         .collect();
+
     let app_state = AppState {
         paths: Arc::new(Manager::new(ice_servers)),
         config: cfg.clone(),
+        dbpool: pool.clone(),
     };
     let auth_layer = ValidateRequestHeaderLayer::custom(ManyValidate::new(cfg.auth));
     let app = Router::new()
         .route("/whip/:id", post(whip))
         .route("/whep/:id", post(whep))
+        .route("/authtokens", post(add_token).delete(remove_token))
         .route(
             "/resource/:id/:key",
             post(change_resource)
@@ -104,8 +143,9 @@ async fn main() {
         .layer(auth_layer)
         .route("/metrics", get(metrics))
         .route("/viewer", get(viewer_handler))
-        .with_state(app_state)
+        .with_state(app_state.clone())
         .layer(axum::middleware::from_fn(print_request_response))
+        .layer(Extension(app_state.clone()))
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
                 let span = info_span!(
@@ -202,6 +242,7 @@ async fn static_handler(uri: Uri) -> impl IntoResponse {
 struct AppState {
     config: Config,
     paths: Arc<Manager>,
+    dbpool: Pool,
 }
 
 async fn print_request_response(
@@ -212,13 +253,11 @@ async fn print_request_response(
     let (parts, body) = req.into_parts();
     let bytes = buffer_and_print("request", req_headers, body).await?;
     let req = Request::from_parts(parts, Body::from(bytes));
-
     let res = next.run(req).await;
     let res_headers = res.headers().clone();
     let (parts, body) = res.into_parts();
     let bytes = buffer_and_print("response", res_headers, body).await?;
     let res = Response::from_parts(parts, Body::from(bytes));
-
     Ok(res)
 }
 
@@ -345,6 +384,44 @@ async fn change_resource(
     Ok(Json(HashMap::new()))
 }
 
+async fn add_token(
+    State(state): State<AppState>,
+    Json(payload): Json<TokenRequest>,
+) -> AppResult<Response<String>> {
+    let token_to_add = payload.token;
+    // Get a connection from the pool
+    let mut conn = state.dbpool.get_conn().unwrap();
+    // Fetch the table
+    let _ = conn.exec_drop(
+        "INSERT INTO tokens (token, created_at) VALUES (:token, NOW()) ON DUPLICATE KEY UPDATE created_at = NOW()",
+        params! {
+            "token" => &token_to_add,
+        },
+    );
+    Ok(Response::builder()
+        .status(StatusCode::OK)
+        .body("Token Add successfully.".to_string())?)
+}
+
+async fn remove_token(
+    State(state): State<AppState>,
+    Json(payload): Json<TokenRequest>,
+) -> AppResult<Response<String>> {
+    let token = payload.token;
+    // Get a connection from the pool
+    let mut conn = state.dbpool.get_conn().unwrap();
+    // Fetch the table
+    let _ = conn.exec_drop(
+        "DELETE FROM tokens WHERE token=:token",
+        params! {
+            "token" => &token,
+        },
+    );
+    Ok(Response::builder()
+        .status(StatusCode::OK)
+        .body("Token remove successfully.".to_string())?)
+}
+
 async fn get_layer(
     State(state): State<AppState>,
     Path((id, _key)): Path<(String, String)>,
@@ -465,4 +542,10 @@ impl From<anyhow::Error> for AppError {
     fn from(err: anyhow::Error) -> Self {
         AppError::InternalServerError(err)
     }
+}
+
+// Define the structure of your request body
+#[derive(Deserialize)]
+struct TokenRequest {
+    token: String,
 }

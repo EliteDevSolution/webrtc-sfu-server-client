@@ -19,19 +19,27 @@ urls = [
 
 # WHIP/WHEP auth token
 # Headers["Authorization"] = "Bearer {token}"
-[auth]
-tokens = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9","SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV", "elitedevsolution707"]
+#[auth]
+#tokens = ["eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ935A","SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVAR25f"]
 
 # Not WHIP/WHEP standard
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#basic
 # Headers["Authorization"] = "Basic {Base64.encode({username}:{password})}"
-# [[auth.accounts]]
-# username = "livestream707"
-# password = "livestream707"
+[[auth.accounts]]
+username = "superadmin"
+password = "eyJhbGciOiJA54stf3IUzI1NiIsInR5cCI6IkpXVCJ935A707"
 
 # [log]
 # Env: `LOG_LEVEL`
 # Default: info
 # Values: off, error, warn, info, debug, trace
 # level = "warn"
+
+[database]
+host = "191.96.31.104"
+port = "3306"
+username = "root"
+password = "Workanaciaob2xbet@"
+dbname = "webrtc_streaming"
+
 
