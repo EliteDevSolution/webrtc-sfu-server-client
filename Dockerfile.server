@@ -1,6 +1,5 @@
 FROM rust:slim-bookworm as builder
 
-RUN apt-get install pkg-config
 RUN apt-get install libudev-dev
 
 WORKDIR /app
