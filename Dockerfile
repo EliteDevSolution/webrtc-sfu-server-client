@@ -3,11 +3,6 @@ FROM debian:sid-slim AS common
 RUN apt update -y && apt install -y --no-install-recommends ca-certificates
 
 RUN apt install -y --no-install-recommends libglib2.0-dev libssl-dev \
-    libgstreamer1.0-dev gstreamer1.0-tools gstreamer1.0-libav \
-    libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-base \
-    gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-    libpango1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-nice
-
 
 FROM common AS builder
 
