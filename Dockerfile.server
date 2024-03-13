@@ -13,6 +13,12 @@ COPY . .
 RUN cargo build --release
 FROM debian:bookworm-slim
 
+RUN apt-get update && \
+    apt-get install -y pkg-config && \
+    apt-get install -y libudev-dev && \
+    apt-get install -y libglib2.0-dev && \
+    apt-get install -y libssl-dev
+
 COPY --from=builder /app/config-dist.toml /etc/livestream707/config.toml
 COPY --from=builder /app/target/release/livestream707 /usr/local/bin/livestream707
 
