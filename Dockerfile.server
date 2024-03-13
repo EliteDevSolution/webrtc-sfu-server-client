@@ -1,6 +1,6 @@
 FROM debian:bookworm-slim AS common
 
-RUN apt install pkg-config
+RUN apt-get install pkg-config
 RUN apt-get install libudev-dev
 
 FROM rust:slim-bookworm as builder
