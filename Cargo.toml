@@ -34,7 +34,6 @@ prometheus = "0.13.3"
 lazy_static = "1.4.0"
 thiserror = "1"
 md5 = "0.7.0"
-openssl = "0.10.64"
 
 # cargo install cargo-deb
 # Reference:  https://github.com/kornelski/cargo-deb
