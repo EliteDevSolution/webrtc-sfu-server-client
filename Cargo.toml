@@ -13,7 +13,6 @@ http-body-util = "0.1.0"
 axum = { version = "0.7.4", features = ["multipart", "tracing"] }
 tower-http = { version = "0.5.2", features = ["fs", "auth", "trace"] }
 mysql = "24.0.0"
-openssl = "0.10"
 
 # TODO
 webrtc = { git = "https://github.com/webrtc-rs/webrtc", rev = "3f34e2e055463e88f5e68ef09f98f9c5c674ff42" }
@@ -35,6 +34,7 @@ prometheus = "0.13.3"
 lazy_static = "1.4.0"
 thiserror = "1"
 md5 = "0.7.0"
+openssl = "0.10.64"
 
 # cargo install cargo-deb
 # Reference:  https://github.com/kornelski/cargo-deb
