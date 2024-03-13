@@ -1820,6 +1820,7 @@ dependencies = [
  "md5",
  "mime_guess",
  "mysql",
+ "openssl",
  "prometheus",
  "rust-embed",
  "serde",
