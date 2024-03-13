@@ -1,18 +1,20 @@
+FROM debian:bookworm-slim AS common
+
+RUN apt install pkg-config
+RUN apt-get install libudev-dev
+
 FROM rust:slim-bookworm as builder
 
 WORKDIR /app
 
 COPY . .
 
-RUN apt install pkg-config
-RUN apt-get install libudev-dev
-
 RUN cargo build --release
 
 RUN cargo build --package=whipinto --release
 RUN cargo build --package=whepfrom --release
 
-FROM debian:bookworm-slim
+FROM common
 
 COPY --from=builder /app/config-dist.toml /etc/livestream707/config.toml
 COPY --from=builder /app/target/release/livestream707 /usr/local/bin/livestream707
