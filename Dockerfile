@@ -2,7 +2,7 @@ FROM debian:sid-slim AS common
 
 RUN apt update -y && apt install -y --no-install-recommends ca-certificates
 
-RUN apt install -y --no-install-recommends libglib2.0-dev libssl-dev \
+RUN apt install -y --no-install-recommends libglib2.0-dev libssl-dev
 
 FROM common AS builder
 
